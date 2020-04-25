@@ -1,32 +1,45 @@
 package nz.ac.ara.srj0070.Sokoban;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
+	List<Level> allLevels = new ArrayList<Level>();
+	Level currentLevel;
 
-	public void addLevel(String string, int i, int j, String string2) {
-		// TODO Auto-generated method stub
-		
+	public String toString() {
+		String stringVersion = "no levels";
+		if(currentLevel != null) {	
+			stringVersion = currentLevel.getName();
+		}
+		return stringVersion;
+	}
+	
+	public void addLevel(String name, int w, int h, String levelString) {
+		Level level = new Level(name, w, h, levelString);
+		allLevels.add(level);
+		currentLevel = level;
 	}
 
-	public void move(Direction left) {
+	public void move(Direction direction) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	public int getLevelCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return allLevels.size();
 	}
 
 	public String getCurrentLevelName() {
-		// TODO Auto-generated method stub
-		return null;
+		return  currentLevel == null ? "no levels" : currentLevel.getName();
 	}
 
 	public List<String> getLevelNames() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> names = new ArrayList<String>();
+		for(Level level : allLevels) {
+			names.add(level.getName());
+		}
+		return names;
 	}
 
 }

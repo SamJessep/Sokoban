@@ -1,7 +1,9 @@
 package nz.ac.ara.srj0070.Sokoban.tests;
-
+import nz.ac.ara.srj0070.Sokoban.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 class TestThreeLevelGame {
 
