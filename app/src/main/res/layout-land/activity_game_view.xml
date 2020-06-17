@@ -7,6 +7,15 @@
     tools:context=".GameView">
 
     <TextView
+        android:id="@+id/moves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Moves: 0/0"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/rightMargin"
+        app:layout_constraintTop_toTopOf="@+id/statMarginTop" />
+
+    <TextView
         android:id="@+id/gameTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,26 +24,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/topMargin" />
-
-    <TextView
-        android:id="@+id/moves"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Moves: 0/0"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/leftMargin"
-        app:layout_constraintTop_toBottomOf="@+id/targets" />
-
-    <TextView
-        android:id="@+id/targets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Targets: 0/0"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/leftMargin"
         app:layout_constraintTop_toTopOf="@+id/topMargin" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,9 +42,19 @@
             android:background="#434343"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/targets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Targets: 0/0"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/leftMargin"
+        app:layout_constraintTop_toTopOf="@+id/statMarginTop" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftMargin"
@@ -90,7 +89,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.13" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/gameBottom"
@@ -126,7 +125,7 @@
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
         android:hapticFeedbackEnabled="true"
-        android:text="Up"
+        android:text="@string/btn_up"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/controlsMiddle"
@@ -148,7 +147,7 @@
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
         android:hapticFeedbackEnabled="true"
-        android:text="Left"
+        android:text="@string/btn_left"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/bottomMargin"
@@ -162,7 +161,7 @@
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
         android:hapticFeedbackEnabled="true"
-        android:text="Down"
+        android:text="@string/btn_down"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/bottomMargin"
@@ -176,12 +175,19 @@
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
         android:hapticFeedbackEnabled="true"
-        android:text="Right"
+        android:text="@string/btn_right"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/bottomMargin"
         app:layout_constraintEnd_toStartOf="@+id/rightMargin"
         app:layout_constraintStart_toStartOf="@+id/controlsRightMargin"
         app:layout_constraintTop_toTopOf="@+id/controlsMiddle" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/statMarginTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05899705" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

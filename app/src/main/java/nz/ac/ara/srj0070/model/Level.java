@@ -1,11 +1,14 @@
 package nz.ac.ara.srj0070.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import android.os.Build;
 
-public class Level {
+import androidx.annotation.RequiresApi;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Level implements Serializable {
 
 	public Integer targetCount;
 	private String name;
@@ -14,11 +17,9 @@ public class Level {
 	private Integer height;
 	protected Placeable[] [] allPlaceables;
 	private Worker worker;
-	
-	
 
 
-	public Level(String name, int w, int h, String levelString) {
+	public Level(String name, int h, int w, String levelString) {
 		this.name = name;
 		width = w;
 		height = h;
@@ -26,32 +27,37 @@ public class Level {
 		targetCount = countTargets();
 		moveCount = 0;
 	}
-	
+
+	@RequiresApi(api = Build.VERSION_CODES.O)
 	public String toString() {
 		String returnString = name + "\n";
 		returnString += boardAsString() + "\n";
 		returnString += "move " + moveCount +"\n";
 		returnString += "completed "+getCompletedCount()+" of "+ targetCount+"\n";
-		
+
 		return returnString;
 	}
-	
+
+	@RequiresApi(api = Build.VERSION_CODES.O)
 	public String boardAsString() {
-		String rowString = "";
-		List<String> rows = new ArrayList<String>();
-		
+		StringBuilder rowString = new StringBuilder();
+		List<String> rows = new ArrayList<>();
+
 		for(Placeable[] row : allPlaceables) {
 			for(Placeable cell : row) {
-				rowString += cell.toString();
+				rowString.append(cell.toString());
 			}
-			rows.add(rowString);
-			rowString = "";
+			rows.add(rowString.toString());
+			rowString = new StringBuilder();
 		}
 		return String.join("\n", rows);
 	}
 	
 	private Placeable[][] toPlaceableArray(String levelString) {
 		Placeable[] [] pieces = new Placeable[height][width];
+		int a = pieces.length;
+		int b = pieces[0].length;
+		int c = levelString.length();
 		int row = 0;
 		int col = 0;
 		for(int index = 0; index<levelString.length(); index++) {
@@ -96,9 +102,9 @@ public class Level {
 		}
 		return placeable;
 	}
-	
-	
-	public void addMove() {
+
+
+	void addMove() {
 		moveCount++;
 	}
 	
@@ -113,8 +119,8 @@ public class Level {
 		}
 		return count;
 	}
-	
-	public Placeable getPlaceable(int x, int y) {
+
+	Placeable getPlaceable(int x, int y) {
 		return allPlaceables[y][x];
 	}
 
@@ -135,8 +141,8 @@ public class Level {
 	public String getName() {
 		return name;
 	}
-	
-	public Worker getWorker() {
+
+	Worker getWorker() {
 		return worker;
 	}
 	

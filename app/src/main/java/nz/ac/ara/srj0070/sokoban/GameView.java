@@ -1,26 +1,31 @@
 package nz.ac.ara.srj0070.sokoban;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import nz.ac.ara.srj0070.model.Direction;
+import nz.ac.ara.srj0070.model.Level;
+import nz.ac.ara.srj0070.model.Placeable;
 import nz.ac.ara.srj0070.model.interfaces.IGame;
 import nz.ac.ara.srj0070.sokoban.interfaces.IView;
-import nz.ac.ara.srj0070.model.*;
 
 public class GameView extends AppCompatActivity implements IView {
 
-    FrameLayout gameArea;
+    ConstraintLayout gameArea;
+    FrameLayout board;
+    IGame model;
 
-    public static Intent makeIntent(MainActivity context) {
+    public static Intent makeIntent(Context context) {
         return new Intent(context, GameView.class);
     }
 
@@ -28,36 +33,47 @@ public class GameView extends AppCompatActivity implements IView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_view);
-        Game g = new Game();
-        g.addLevel("Level1", 6, 5,
-                "######" +
-                        "#+x..#" +
-                        "#..w.#" +
-                        "#....#" +
-                        "######");
-        StartGame(g);
-        SetupControls(g);
+        gameArea = findViewById(R.id.gameArea);
+        board = findViewById(R.id.board);
+        Intent intent = getIntent();
+        model = (IGame) intent.getSerializableExtra("game");
+
+        Log.d("check Level", model.toString());
+        ViewTreeObserver vto = gameArea.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                StartGame(model);
+                SetupControls(model);
+                gameArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
     public void StartGame(IGame game) {
-        gameArea = findViewById(R.id.gameArea);
         TextView tv = new TextView(this);
         DrawLevel(game.getCurrentLevel());
     }
 
-    private void SetupControls(Game g){
-        Button L_button = findViewById(R.id.LeftButton);
-        Button R_button = findViewById(R.id.RightButton);
-        Button U_button = findViewById(R.id.UpButton);
-        Button D_button = findViewById(R.id.DownButton);
+    private void SetupControls(IGame g) {
+        Button L_button = findViewById(R.id.leftButton);
+        Button R_button = findViewById(R.id.rightButton);
+        Button U_button = findViewById(R.id.upButton);
+        Button D_button = findViewById(R.id.downButton);
 
         L_button.setOnClickListener(v -> performMove(g, Direction.LEFT));
         R_button.setOnClickListener(v -> performMove(g, Direction.RIGHT));
         U_button.setOnClickListener(v -> performMove(g, Direction.UP));
         D_button.setOnClickListener(v -> performMove(g, Direction.DOWN));
     }
-    private void performMove(Game g, Direction d){
+
+    private void performMove(IGame g, Direction d) {
         g.move(d);
         DrawLevel(g.getCurrentLevel());
     }
@@ -65,10 +81,9 @@ public class GameView extends AppCompatActivity implements IView {
     @Override
     public void DrawLevel(Level level) {
         DrawHUD(level);
-        Log.d("level", level.toString());
         ImageView cellView;
         FrameLayout.LayoutParams params;
-        int cellSize = 150;
+        int cellSize = getCellSize(level.getWidth(), level.getHeight());
         int y = 0;
         for(Placeable[] row  : level.getAllPlaceables()){
             int x = 0;
@@ -79,7 +94,7 @@ public class GameView extends AppCompatActivity implements IView {
                 params.leftMargin = cellSize*x;
                 params.topMargin = cellSize*y;
                 cellView.setBackgroundColor(getResources().getColor(getCellColor(cell.toString())));
-                gameArea.addView(cellView, params);
+                board.addView(cellView, params);
                 x++;
             }
             y++;
@@ -96,6 +111,13 @@ public class GameView extends AppCompatActivity implements IView {
         gameTitle.setText(level.getName());
 
 
+    }
+
+    private int getCellSize(int width, int height) {
+        int GH = gameArea.getMeasuredHeight();
+        int GW = gameArea.getMeasuredWidth();
+        Log.d("gameSize", "w:" + GW + " h:" + GH);
+        return Math.min(GH / height, GW / width);
     }
 
     private int getCellColor(String key){

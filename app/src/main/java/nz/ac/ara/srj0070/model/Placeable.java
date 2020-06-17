@@ -1,14 +1,12 @@
 package nz.ac.ara.srj0070.model;
 
-public class Placeable {
+import java.io.Serializable;
+
+public class Placeable implements Serializable {
 	public int x;
 	public int y;
-	
-	Placeable (){
-		
-	}
-	
-	Placeable(int x, int y){
+
+	Placeable(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}

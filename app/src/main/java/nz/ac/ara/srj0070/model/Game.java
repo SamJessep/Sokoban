@@ -6,7 +6,7 @@ import java.util.List;
 import nz.ac.ara.srj0070.model.interfaces.IGame;
 
 public class Game implements IGame {
-	List<Level> allLevels = new ArrayList<Level>();
+	private List<Level> allLevels = new ArrayList<>();
 	Level currentLevel;
 
 	public String toString() {
@@ -17,10 +17,14 @@ public class Game implements IGame {
 		}
 		return stringVersion;
 	}
-	
-	public void addLevel(String name, int w, int h, String levelString) {
-		Level level = new Level(name, w, h, levelString);
+
+	public void addLevel(String name, int h, int w, String levelString) {
+		Level level = new Level(name, h, w, levelString);
 		allLevels.add(level);
+		currentLevel = level;
+	}
+
+	public void loadLevel(Level level) {
 		currentLevel = level;
 	}
 	
@@ -50,10 +54,7 @@ public class Game implements IGame {
 		Placeable nextCell = currentLevel.getPlaceable(x,y);
 		if(nextCell instanceof Container) {
 			if(((Container) nextCell).isEmpty() || canMove(dir, nextCell)){
-				result = true;
-				if(obj instanceof Container && ((Container)obj).objectOnTop instanceof Crate && ((Container)nextCell).objectOnTop instanceof Crate) {
-					result = false;
-				}
+				result = !(obj instanceof Container) || !(((Container) obj).objectOnTop instanceof Crate) || !(((Container) nextCell).objectOnTop instanceof Crate);
 			}
 			
 		}
@@ -70,6 +71,10 @@ public class Game implements IGame {
 	
 	public Level getCurrentLevel() {
 		return currentLevel;
+	}
+
+	public List<Level> getLevels() {
+		return allLevels;
 	}
 
 	public List<String> getLevelNames() {
