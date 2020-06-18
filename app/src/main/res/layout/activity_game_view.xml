@@ -7,7 +7,7 @@
     tools:context=".GameView">
 
     <TextView
-        android:id="@+id/gameTitle"
+        android:id="@+id/tvGameTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
@@ -17,18 +17,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/topMargin" />
 
+    <Button
+        android:id="@+id/btn_Pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause"
+        app:layout_constraintEnd_toStartOf="@+id/rightMargin"
+        app:layout_constraintTop_toTopOf="@+id/topMargin" />
+
     <TextView
-        android:id="@+id/moves"
+        android:id="@+id/tvMoveCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Moves: 0/0"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/leftMargin"
-        app:layout_constraintTop_toBottomOf="@+id/targets" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTargets" />
 
     <TextView
-        android:id="@+id/targets"
+        android:id="@+id/tvTargets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -38,7 +46,7 @@
         app:layout_constraintTop_toTopOf="@+id/topMargin" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/gameArea"
+        android:id="@+id/clGameArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/gameBottom"
@@ -47,7 +55,7 @@
         app:layout_constraintTop_toTopOf="@+id/gameTop">
 
         <FrameLayout
-            android:id="@+id/board"
+            android:id="@+id/flBoard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#434343"
@@ -121,7 +129,7 @@
         app:layout_constraintGuide_percent="0.82" />
 
     <Button
-        android:id="@+id/upButton"
+        android:id="@+id/btn_UpButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
@@ -143,7 +151,7 @@
         app:layout_constraintGuide_percent="0.64" />
 
     <Button
-        android:id="@+id/leftButton"
+        android:id="@+id/btn_LeftButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
@@ -157,7 +165,7 @@
         app:layout_constraintTop_toTopOf="@+id/controlsMiddle" />
 
     <Button
-        android:id="@+id/downButton"
+        android:id="@+id/btn_DownButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
@@ -171,7 +179,7 @@
         app:layout_constraintTop_toTopOf="@+id/controlsMiddle" />
 
     <Button
-        android:id="@+id/rightButton"
+        android:id="@+id/btn_RightButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fontFamily="sans-serif-smallcaps"
@@ -183,5 +191,15 @@
         app:layout_constraintEnd_toStartOf="@+id/rightMargin"
         app:layout_constraintStart_toStartOf="@+id/controlsRightMargin"
         app:layout_constraintTop_toTopOf="@+id/controlsMiddle" />
+
+    <TextView
+        android:id="@+id/tvTimeElapsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Time: 0.0"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/controlsRightMargin"
+        app:layout_constraintTop_toTopOf="@+id/topMargin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

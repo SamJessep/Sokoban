@@ -23,9 +23,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Level> mLevels;
     private IGame mGame;
 
-    public RecyclerViewAdapter(Context context, List<Level> levels, IGame game) {
+    public RecyclerViewAdapter(Context context, IGame game) {
         mContext = context;
-        mLevels = levels;
+        mLevels = game.getLevels();
         mGame = game;
     }
 

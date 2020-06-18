@@ -95,4 +95,22 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="btn_settings">Settings</string>
+    <string name="btn_level_select">Level Select</string>
+    <string name="ControlSelect">Control Type</string>
+    <string name="rb_OnscreenButtons">Onscreen Buttons</string>
+    <string name="rb_Touch">Touch</string>
+    <string name="rb_GyroSernsor">GyroSensor</string>
+    <string name="rb_Swipe">Swipe Gestures</string>
+    <string name="tv_ThemeSelect">Appearance</string>
+    <string name="sw_darkMode">Dark Mode</string>
+    <string name="tb_default">Default</string>
+    <string name="tb_community">Community</string>
+    <string name="tb_myLevels">My Levels</string>
+    <string name="title_activity_tabed_demo">TabedDemo</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

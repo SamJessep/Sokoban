@@ -3,6 +3,8 @@ package nz.ac.ara.srj0070.sokoban;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -10,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -17,13 +20,27 @@ import nz.ac.ara.srj0070.model.Direction;
 import nz.ac.ara.srj0070.model.Level;
 import nz.ac.ara.srj0070.model.Placeable;
 import nz.ac.ara.srj0070.model.interfaces.IGame;
+import nz.ac.ara.srj0070.model.interfaces.IGameController;
 import nz.ac.ara.srj0070.sokoban.interfaces.IView;
 
 public class GameView extends AppCompatActivity implements IView {
-
-    ConstraintLayout gameArea;
-    FrameLayout board;
     IGame model;
+    public static Handler timerHandler;
+    IGameController controller;
+    //Layouts
+    ConstraintLayout clGameArea;
+    FrameLayout flBoard;
+    //Components
+    TextView tvGameTitle;
+    TextView tvMoveCount;
+    TextView tvTargetCount;
+    TextView tvTimeElaspsed;
+    Button btn_L_button;
+    Button btn_R_button;
+    Button btn_U_button;
+    Button btn_D_button;
+    Button btn_Pause;
+
 
     public static Intent makeIntent(Context context) {
         return new Intent(context, GameView.class);
@@ -33,19 +50,40 @@ public class GameView extends AppCompatActivity implements IView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_view);
-        gameArea = findViewById(R.id.gameArea);
-        board = findViewById(R.id.board);
         Intent intent = getIntent();
+        SetupComponentRefs();
         model = (IGame) intent.getSerializableExtra("game");
+        if (savedInstanceState != null) {
+            controller = (IGameController) savedInstanceState.getSerializable("controller");
+            updateTimer(controller.GetTimeElapsed());
+        } else {
+            controller = new GameController(this, model);
+        }
 
-        Log.d("check Level", model.toString());
-        ViewTreeObserver vto = gameArea.getViewTreeObserver();
+
+        timerHandler = new Handler() {
+            IView view;
+
+            public Handler init(IView gameView) {
+                view = gameView;
+                return this;
+            }
+
+            @Override
+            public void handleMessage(Message msg) {
+                Log.d("GameTimer", msg.what + " Seconds elapsed");
+                view.updateTimer(msg.what);
+            }
+        }.init(this);
+
+        ViewTreeObserver vto;
+        vto = clGameArea.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 StartGame(model);
                 SetupControls(model);
-                gameArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                clGameArea.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
@@ -53,24 +91,70 @@ public class GameView extends AppCompatActivity implements IView {
     @Override
     protected void onStart() {
         super.onStart();
+        controller.StartGame();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //controller.CloseGame();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        controller.CloseGame();
+        this.finish();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("controller", controller);
     }
 
     @Override
     public void StartGame(IGame game) {
+        updatePauseButton(controller.isPaused());
         TextView tv = new TextView(this);
         DrawLevel(game.getCurrentLevel());
     }
 
-    private void SetupControls(IGame g) {
-        Button L_button = findViewById(R.id.leftButton);
-        Button R_button = findViewById(R.id.rightButton);
-        Button U_button = findViewById(R.id.upButton);
-        Button D_button = findViewById(R.id.downButton);
+    private void PauseGame() {
+        controller.PauseGame();
+    }
 
-        L_button.setOnClickListener(v -> performMove(g, Direction.LEFT));
-        R_button.setOnClickListener(v -> performMove(g, Direction.RIGHT));
-        U_button.setOnClickListener(v -> performMove(g, Direction.UP));
-        D_button.setOnClickListener(v -> performMove(g, Direction.DOWN));
+    private void ResumeGame() {
+        controller.ResumeGame();
+    }
+
+    private void SetupComponentRefs() {
+        clGameArea = findViewById(R.id.clGameArea);
+        flBoard = findViewById(R.id.flBoard);
+        tvMoveCount = findViewById(R.id.tvMoveCount);
+        tvTargetCount = findViewById(R.id.tvTargets);
+        tvGameTitle = findViewById(R.id.tvGameTitle);
+        tvTimeElaspsed = findViewById(R.id.tvTimeElapsed);
+        btn_L_button = findViewById(R.id.btn_LeftButton);
+        btn_R_button = findViewById(R.id.btn_RightButton);
+        btn_U_button = findViewById(R.id.btn_UpButton);
+        btn_D_button = findViewById(R.id.btn_DownButton);
+        btn_Pause = findViewById(R.id.btn_Pause);
+    }
+
+    private void SetupControls(IGame g) {
+        btn_L_button.setOnClickListener(v -> performMove(g, Direction.LEFT));
+        btn_R_button.setOnClickListener(v -> performMove(g, Direction.RIGHT));
+        btn_U_button.setOnClickListener(v -> performMove(g, Direction.UP));
+        btn_D_button.setOnClickListener(v -> performMove(g, Direction.DOWN));
+        btn_Pause.setOnClickListener(v -> {
+            boolean isPaused = btn_Pause.getText().toString().equals("Pause");
+            if (isPaused) {
+                PauseGame();
+            } else {
+                ResumeGame();
+            }
+            updatePauseButton(isPaused);
+        });
     }
 
     private void performMove(IGame g, Direction d) {
@@ -80,6 +164,7 @@ public class GameView extends AppCompatActivity implements IView {
 
     @Override
     public void DrawLevel(Level level) {
+        flBoard.removeAllViews();
         DrawHUD(level);
         ImageView cellView;
         FrameLayout.LayoutParams params;
@@ -88,13 +173,13 @@ public class GameView extends AppCompatActivity implements IView {
         for(Placeable[] row  : level.getAllPlaceables()){
             int x = 0;
             for(Placeable cell: row){
-                Log.d("coords", "x:"+x+" y:"+y+" x:"+cell.x+" y:"+cell.y+" cell:"+cell);
+                //Log.d("coords", "x:"+x+" y:"+y+" x:"+cell.x+" y:"+cell.y+" cell:"+cell);
                 cellView = new ImageView(this);
                 params = new FrameLayout.LayoutParams(cellSize, cellSize);
                 params.leftMargin = cellSize*x;
                 params.topMargin = cellSize*y;
                 cellView.setBackgroundColor(getResources().getColor(getCellColor(cell.toString())));
-                board.addView(cellView, params);
+                flBoard.addView(cellView, params);
                 x++;
             }
             y++;
@@ -102,20 +187,22 @@ public class GameView extends AppCompatActivity implements IView {
     }
 
     public void DrawHUD(Level level){
-        TextView moveCount = findViewById(R.id.moves);
-        TextView targetCount = findViewById(R.id.targets);
-        TextView gameTitle = findViewById(R.id.gameTitle);
+        tvMoveCount.setText("moves: " + level.getMoveCount());
+        tvTargetCount.setText("targets: " + level.getCompletedCount() + "/" + level.targetCount);
+        tvGameTitle.setText(level.getName());
+    }
 
-        moveCount.setText("moves: "+level.getMoveCount());
-        targetCount.setText("targets: "+level.getCompletedCount()+"/"+level.targetCount);
-        gameTitle.setText(level.getName());
+    public void updateTimer(double timeElapsed) {
+        tvTimeElaspsed.setText("Time: " + timeElapsed);
+    }
 
-
+    public void updatePauseButton(boolean paused) {
+        btn_Pause.setText(paused ? "Resume" : "Pause");
     }
 
     private int getCellSize(int width, int height) {
-        int GH = gameArea.getMeasuredHeight();
-        int GW = gameArea.getMeasuredWidth();
+        int GH = clGameArea.getMeasuredHeight();
+        int GW = clGameArea.getMeasuredWidth();
         Log.d("gameSize", "w:" + GW + " h:" + GH);
         return Math.min(GH / height, GW / width);
     }

@@ -15,22 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nz.ac.ara.srj0070.model.Level;
+import nz.ac.ara.srj0070.model.interfaces.IGame;
 
 public class sqliteHelper extends SQLiteOpenHelper {
-    public static final String LEVEL_TABLE_NAME = "level";
-    public static final String LEVEL_ID = "id";
-    public static final String LEVEL_AUTHOR = "author";
-    public static final String LEVEL_STRING = "levelString";
-    public static final String LEVEL_HEIGHT = "height";
-    public static final String LEVEL_WIDTH = "width";
-    public static final String LEVEL_NAME = "name";
+    private static final String LEVEL_TABLE_NAME = "level";
+    private static final String LEVEL_ID = "id";
+    private static final String LEVEL_AUTHOR = "author";
+    private static final String LEVEL_STRING = "levelString";
+    private static final String LEVEL_HEIGHT = "height";
+    private static final String LEVEL_WIDTH = "width";
+    private static final String LEVEL_NAME = "name";
     private static final int DB_VERSION = 1;
     private static String DB_PATH = "";
     private static String DB_NAME = "levels.db";
     private boolean mNeedUpdate = false;
     private Context mContext;
 
-    public sqliteHelper(Context context) {
+    sqliteHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         if (android.os.Build.VERSION.SDK_INT >= 17) {
             DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
@@ -38,14 +39,13 @@ public class sqliteHelper extends SQLiteOpenHelper {
             DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
         }
         mContext = context;
-//        loadBaseLevels();
-//        this.getReadableDatabase();
+        loadBaseLevels();
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String create = "CREATE TABLE " + LEVEL_TABLE_NAME + " (" + LEVEL_ID + "	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + LEVEL_NAME + "	TEXT," + LEVEL_WIDTH + "	INTEGER NOT NULL," + LEVEL_HEIGHT + "	INTEGER NOT NULL," + LEVEL_STRING + "	TEXT," + LEVEL_AUTHOR + "	TEXT)";
+        String create = "CREATE TABLE IF NOT EXISTS " + LEVEL_TABLE_NAME + " (" + LEVEL_ID + "	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, " + LEVEL_NAME + "	TEXT," + LEVEL_WIDTH + "	INTEGER NOT NULL," + LEVEL_HEIGHT + "	INTEGER NOT NULL," + LEVEL_STRING + "	TEXT," + LEVEL_AUTHOR + "	TEXT)";
         db.execSQL(create);
     }
 
@@ -61,7 +61,7 @@ public class sqliteHelper extends SQLiteOpenHelper {
     }
 
     private void loadBaseLevels() {
-        if (!dbExists()) {
+        //if (!dbExists()) {
             this.getReadableDatabase();
             this.close();
             try {
@@ -70,7 +70,7 @@ public class sqliteHelper extends SQLiteOpenHelper {
 
                 throw new Error("ErrorCopyingDataBase");
             }
-        }
+        //}
     }
 
     private void copyDBFile() throws IOException {
@@ -99,7 +99,7 @@ public class sqliteHelper extends SQLiteOpenHelper {
         return success != -1;
     }
 
-    public List<Level> getAllLevels() {
+    public IGame getAllLevels(IGame game) {
         String sql = "SELECT * FROM " + LEVEL_TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -111,14 +111,14 @@ public class sqliteHelper extends SQLiteOpenHelper {
                 String l_name = cursor.getString(1);
                 int l_height = cursor.getInt(3);
                 int l_width = cursor.getInt(2);
-                String l_string = cursor.getString(4);
+                String l_string = serializeLevelString(cursor.getString(4));
                 String l_author = cursor.getString(5);
-                levels.add(new Level(l_name, l_height, l_width, l_string));
+                game.addLevel(l_name, l_height, l_width, l_string);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
-        return levels;
+        return game;
     }
 
     private String serializeLevelString(String level) {

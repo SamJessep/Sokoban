@@ -7,46 +7,28 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import nz.ac.ara.srj0070.model.Game;
-import nz.ac.ara.srj0070.model.interfaces.IGame;
-
 public class StartMenu extends AppCompatActivity {
-    private Button mStartButton;
+    private Button mSettingsButton;
     private Button mLevelSelect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("validate", "MainActivity started" + this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mStartButton = findViewById(R.id.startButton);
+        mSettingsButton = findViewById(R.id.Settings);
         mLevelSelect = findViewById(R.id.btn_levelSelect);
-        IGame game = loadGames(new Game());
-        mLevelSelect.setOnClickListener(v -> startLevelSelect(game));
-        mStartButton.setOnClickListener(v -> startLevelDemo(game));
+        mLevelSelect.setOnClickListener(v -> startLevelSelect());
+        mSettingsButton.setOnClickListener(v -> startSettings());
     }
 
-    private void startLevelSelect(IGame game) {
-
+    private void startLevelSelect() {
         Intent intent = LevelSelect.makeIntent(StartMenu.this);
-        intent.putExtra("game", game);
-            startActivity(intent);
-    }
-
-    private void startLevelDemo(IGame game) {
-        Intent intent = GameView.makeIntent(StartMenu.this);
-        intent.putExtra("game", game);
-        intent.putExtra("level", game.getCurrentLevel());
         startActivity(intent);
     }
 
-    private IGame loadGames(IGame game) {
-        game.addLevel("Level1", 5, 6,
-                "######" +
-                        "#+x..#" +
-                        "#..w.#" +
-                        "#....#" +
-                        "######");
-        return game;
-        //game.addLevel();
+    private void startSettings() {
+        Intent intent = Settings.makeIntent(StartMenu.this);
+        startActivity(intent);
     }
+
 }
