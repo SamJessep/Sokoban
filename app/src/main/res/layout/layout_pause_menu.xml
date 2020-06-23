@@ -4,27 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/tv_Pause"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_Pause_ResumeButtton"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.347" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_Pause_ResumeButtton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
         android:text="@string/btn_resume"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/maxWidthR"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/maxWidthL"
         app:layout_constraintTop_toTopOf="@+id/topButtons" />
 
@@ -32,10 +41,13 @@
         android:id="@+id/btn_Pause_LevelSelect"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="72dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
         android:text="@string/btn_level_select"
+        android:textSize="24sp"
         app:layout_constraintEnd_toStartOf="@+id/maxWidthR"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/maxWidthL"
         app:layout_constraintTop_toBottomOf="@+id/btn_Pause_ResumeButtton" />
 
@@ -43,12 +55,16 @@
         android:id="@+id/btn_Pause_MainMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="17dp"
         android:text="@string/btn_main_menu"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
         app:layout_constraintEnd_toStartOf="@+id/maxWidthR"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/maxWidthL"
-        app:layout_constraintTop_toBottomOf="@+id/btn_Pause_LevelSelect" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_Pause_LevelSelect"
+        app:layout_constraintVertical_bias="0.407" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/maxWidthL"

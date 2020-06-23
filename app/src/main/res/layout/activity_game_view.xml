@@ -52,19 +52,7 @@
         app:layout_constraintBottom_toTopOf="@+id/gameBottom"
         app:layout_constraintEnd_toStartOf="@+id/rightMargin"
         app:layout_constraintStart_toStartOf="@+id/leftMargin"
-        app:layout_constraintTop_toTopOf="@+id/gameTop">
-
-        <FrameLayout
-            android:id="@+id/flBoard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#434343"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="@+id/gameTop" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftMargin"
@@ -213,6 +201,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/topMargin"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

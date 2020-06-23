@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -22,8 +23,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private List<Level> mLevels;
     private IGame mGame;
+    private FragmentManager mFragmentManager;
 
-    public RecyclerViewAdapter(Context context, IGame game) {
+    RecyclerViewAdapter(Context context, IGame game, FragmentManager fm) {
+        mFragmentManager = fm;
         mContext = context;
         mLevels = game.getLevels();
         mGame = game;
@@ -33,8 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_level_list_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -42,11 +44,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Level level = mLevels.get(position);
         int w = level.getWidth();
         int h = level.getHeight();
-
+        int preview_id = View.generateViewId();
+        holder.gamePreview.setId(preview_id);
         holder.name.setText(level.getName());
-        holder.gameSize.setText("Size: " + w + "/" + h);
-        holder.targetCount.setText("Targets: " + level.targetCount);
-        holder.gameString.setText(level.boardAsString());
+        holder.gameSize.setText(String.format("Size: %d/%d", w, h));
+        holder.targetCount.setText(String.format("Targets: %d", level.targetCount));
+        GameView.DrawGame(level, preview_id, mFragmentManager);
         holder.parentLayout.setOnClickListener(view -> {
             Log.d("levelSelect", "" + position);
             Intent intent = GameView.makeIntent(mContext);
@@ -62,19 +65,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return mLevels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView targetCount;
         TextView gameSize;
-        TextView gameString;
+        View gamePreview;
         ConstraintLayout parentLayout;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.tv_levelName);
             targetCount = itemView.findViewById(R.id.tv_targetCount);
             gameSize = itemView.findViewById(R.id.tv_levelSize);
-            gameString = itemView.findViewById(R.id.tv_levelString);
+            gamePreview = itemView.findViewById(R.id.placeholder_game_preview);
             parentLayout = itemView.findViewById(R.id.levelCard);
         }
     }

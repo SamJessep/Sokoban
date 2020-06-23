@@ -28,7 +28,7 @@ public class LevelList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_level_list, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), (IGame) getArguments().getSerializable("game"));
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getActivity(), (IGame) getArguments().getSerializable("game"), getActivity().getSupportFragmentManager());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return root;

@@ -11,7 +11,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:layout_marginTop="24dp"
         android:text="Time: 0.0"
         android:textSize="18sp"
@@ -23,7 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="136dp"
-        android:layout_marginRight="136dp"
         android:text="Pause"
         app:layout_constraintEnd_toStartOf="@+id/rightMargin"
         app:layout_constraintStart_toStartOf="@+id/controlsRightMargin"
@@ -212,5 +210,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.05899705" />
+
+    <LinearLayout
+        android:id="@+id/ll_pauseMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/pauseMenuBackground"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topMargin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

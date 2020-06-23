@@ -1,6 +1,8 @@
 package nz.ac.ara.srj0070.model;
 
-public enum Direction {
+import java.io.Serializable;
+
+public enum Direction implements Serializable {
 	LEFT(-1, 0),
 	RIGHT(1, 0),
 	UP(0, -1),

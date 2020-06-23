@@ -116,4 +116,6 @@
     <string name="tv_Pause">Pause Menu</string>
     <string name="btn_resume">Resume</string>
     <string name="btn_main_menu">Main Menu</string>
+    <string name="btn_back_to_menu">Back To Main Menu</string>
+    <string name="back_to_level_select">Back To Level Select</string>
 </resources>

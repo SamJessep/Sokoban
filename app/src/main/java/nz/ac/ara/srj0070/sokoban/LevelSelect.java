@@ -1,13 +1,14 @@
 package nz.ac.ara.srj0070.sokoban;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -20,7 +21,7 @@ import java.util.List;
 import nz.ac.ara.srj0070.model.Game;
 import nz.ac.ara.srj0070.model.interfaces.IGame;
 
-public class LevelSelect extends AppCompatActivity {
+public class LevelSelect extends FragmentActivity {
 
     IGame mGame;
     List<IGame> games;
@@ -30,7 +31,7 @@ public class LevelSelect extends AppCompatActivity {
     private ViewPager mViewPager;
 
 
-    public static Intent makeIntent(StartMenu context) {
+    public static Intent makeIntent(Context context) {
         return new Intent(context, LevelSelect.class);
     }
 
@@ -76,14 +77,13 @@ public class LevelSelect extends AppCompatActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 
-        public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+        SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
             super(fm, behavior);
         }
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = LevelList.newInstance(games.get(position));
-            return fragment;
+            return LevelList.newInstance(games.get(position));
         }
 
         @Override

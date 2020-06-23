@@ -1,5 +1,6 @@
 package nz.ac.ara.srj0070.sokoban;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,11 @@ import androidx.appcompat.app.AppCompatActivity;
 public class StartMenu extends AppCompatActivity {
     private Button mSettingsButton;
     private Button mLevelSelect;
+
+    public static Intent makeIntent(Context context) {
+        return new Intent(context, StartMenu.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("validate", "MainActivity started" + this);
