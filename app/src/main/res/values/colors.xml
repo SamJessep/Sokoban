@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
 
+
+    <color name="transparent">#00616161</color>
+    <color name="pauseMenuBackground">#616161</color>
     <color name="wall">#940096</color>
     <color name="empty">#000000</color>
     <color name="target">#e80505</color>

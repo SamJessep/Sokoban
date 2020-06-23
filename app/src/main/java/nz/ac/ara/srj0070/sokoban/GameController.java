@@ -35,7 +35,7 @@ public class GameController implements IGameController {
 
     public void ResumeGame() {
         timer.ResumeTimer();
-        isPaused = true;
+        isPaused = false;
     }
 
     @Override

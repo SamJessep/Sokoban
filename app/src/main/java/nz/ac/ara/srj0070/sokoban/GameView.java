@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,8 @@ import nz.ac.ara.srj0070.model.interfaces.IGame;
 import nz.ac.ara.srj0070.model.interfaces.IGameController;
 import nz.ac.ara.srj0070.sokoban.interfaces.IView;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 public class GameView extends AppCompatActivity implements IView {
     IGame model;
     public static Handler timerHandler;
@@ -30,6 +34,7 @@ public class GameView extends AppCompatActivity implements IView {
     //Layouts
     ConstraintLayout clGameArea;
     FrameLayout flBoard;
+    LinearLayout llPauseMenu;
     //Components
     TextView tvGameTitle;
     TextView tvMoveCount;
@@ -40,6 +45,9 @@ public class GameView extends AppCompatActivity implements IView {
     Button btn_U_button;
     Button btn_D_button;
     Button btn_Pause;
+    Button btn_resume;
+    Button btn_main_menu;
+    Button btn_level_select;
 
 
     public static Intent makeIntent(Context context) {
@@ -96,13 +104,13 @@ public class GameView extends AppCompatActivity implements IView {
 
     @Override
     protected void onDestroy() {
-        //controller.CloseGame();
+        controller.CloseGame();
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        controller.CloseGame();
+        //controller.CloseGame();
         this.finish();
     }
 
@@ -121,15 +129,34 @@ public class GameView extends AppCompatActivity implements IView {
 
     private void PauseGame() {
         controller.PauseGame();
+        btn_L_button.setVisibility(View.GONE);
+        btn_R_button.setVisibility(View.GONE);
+        btn_U_button.setVisibility(View.GONE);
+        btn_D_button.setVisibility(View.GONE);
+        btn_Pause.setVisibility(View.GONE);
+        llPauseMenu.setVisibility(View.VISIBLE);
     }
 
     private void ResumeGame() {
         controller.ResumeGame();
+        btn_L_button.setVisibility(View.VISIBLE);
+        btn_R_button.setVisibility(View.VISIBLE);
+        btn_U_button.setVisibility(View.VISIBLE);
+        btn_D_button.setVisibility(View.VISIBLE);
+        btn_Pause.setVisibility(View.VISIBLE);
+        llPauseMenu.setVisibility(View.GONE);
+    }
+
+    private void GoToMainMenu() {
+        Intent intent = new Intent(this, StartMenu.class);
+        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void SetupComponentRefs() {
         clGameArea = findViewById(R.id.clGameArea);
         flBoard = findViewById(R.id.flBoard);
+        llPauseMenu = findViewById(R.id.ll_pauseMenu);
         tvMoveCount = findViewById(R.id.tvMoveCount);
         tvTargetCount = findViewById(R.id.tvTargets);
         tvGameTitle = findViewById(R.id.tvGameTitle);
@@ -139,6 +166,11 @@ public class GameView extends AppCompatActivity implements IView {
         btn_U_button = findViewById(R.id.btn_UpButton);
         btn_D_button = findViewById(R.id.btn_DownButton);
         btn_Pause = findViewById(R.id.btn_Pause);
+        View pause_view = getLayoutInflater().inflate(R.layout.layout_pause_menu, llPauseMenu);
+        btn_resume = pause_view.findViewById(R.id.btn_Pause_ResumeButtton);
+        btn_level_select = pause_view.findViewById(R.id.btn_Pause_LevelSelect);
+        btn_main_menu = pause_view.findViewById(R.id.btn_Pause_MainMenu);
+
     }
 
     private void SetupControls(IGame g) {
@@ -146,12 +178,15 @@ public class GameView extends AppCompatActivity implements IView {
         btn_R_button.setOnClickListener(v -> performMove(g, Direction.RIGHT));
         btn_U_button.setOnClickListener(v -> performMove(g, Direction.UP));
         btn_D_button.setOnClickListener(v -> performMove(g, Direction.DOWN));
+        btn_resume.setOnClickListener(v -> ResumeGame());
+        btn_level_select.setOnClickListener(v -> finish());
+        btn_main_menu.setOnClickListener(v -> GoToMainMenu());
         btn_Pause.setOnClickListener(v -> {
-            boolean isPaused = btn_Pause.getText().toString().equals("Pause");
+            boolean isPaused = controller.isPaused();
             if (isPaused) {
-                PauseGame();
-            } else {
                 ResumeGame();
+            } else {
+                PauseGame();
             }
             updatePauseButton(isPaused);
         });

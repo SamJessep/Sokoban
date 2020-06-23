@@ -113,4 +113,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_Pause">Pause Menu</string>
+    <string name="btn_resume">Resume</string>
+    <string name="btn_main_menu">Main Menu</string>
 </resources>

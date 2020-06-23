@@ -63,6 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -201,5 +202,17 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/controlsRightMargin"
         app:layout_constraintTop_toTopOf="@+id/topMargin" />
+
+    <LinearLayout
+        android:id="@+id/ll_pauseMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/pauseMenuBackground"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topMargin"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
